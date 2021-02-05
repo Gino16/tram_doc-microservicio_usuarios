@@ -11,5 +11,10 @@ public interface UsuarioRepository extends CrudRepository<Usuario, Long> {
 
     @RestResource(path = "buscar-username")
     public Usuario findByUsername(@Param("nombre") String username);
+
+    public Usuario findByDniRuc(String dniRuc);
+
+    public Usuario findByResetPasswordToken(String password);
+
 }
 
