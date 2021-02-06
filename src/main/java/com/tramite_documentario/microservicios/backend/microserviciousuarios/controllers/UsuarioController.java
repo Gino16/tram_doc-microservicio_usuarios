@@ -61,11 +61,11 @@ public class UsuarioController {
         helper.setFrom("ginoag7@gmail.com", "Mikasa Support");
         helper.setTo(correo);
 
-        String mensaje = "Aca esta el link olvidadizo, restablece tu contra please";
+        String mensaje = "Recuperar contraseña del sistema";
 
-        String contenido = "<p>Hola Usuario,</p> " +
-                "<p>Te paso link para restablecer tu contra, <strong>no te olvides pa la proxima.</strong></p>" +
-                "<p>Click en el link para restablecer contraseña</p>" +
+        String contenido = "<h1>Hola Usuario,</h1> " +
+                "<p>Le alcanzo link para restablecer tu contraseña</p>" +
+                "<p><strong>Click en el link para restablecer contraseña</strong></p>" +
                 "<a href=\"" + resetPasswordLink + "\" >Cambiar contraseña</a>";
 
         helper.setSubject(mensaje);
