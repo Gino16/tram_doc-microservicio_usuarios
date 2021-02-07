@@ -7,14 +7,24 @@ import com.tramite_documentario.microservicios.backend.microserviciousuarios.mod
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
+import java.io.UnsupportedEncodingException;
 
 
 @Service
 public class UsuarioServiceImpl implements UsuarioService {
 
     private Logger logger = LoggerFactory.getLogger(UsuarioServiceImpl.class);
+
+
+    @Autowired
+    private JavaMailSender mailSender;
 
     @Autowired
     private UsuarioRepository repository;
@@ -60,6 +70,26 @@ public class UsuarioServiceImpl implements UsuarioService {
         usuario.setResetPasswordToken(null);
 
         return repository.save(usuario);
+    }
+
+    public void sendMail(String correo, String resetPasswordLink) throws UnsupportedEncodingException, MessagingException {
+        MimeMessage message = mailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(message);
+
+        helper.setFrom("ginoag7@gmail.com", "Mikasa Support");
+        helper.setTo(correo);
+
+        String mensaje = "Recuperar contraseña del sistema";
+
+        String contenido = "<h1>Hola Usuario,</h1> " +
+                "<p>Le alcanzo link para restablecer tu contraseña</p>" +
+                "<p><strong>Click en el link para restablecer contraseña</strong></p>" +
+                "<a href=\"" + resetPasswordLink + "\" >Cambiar contraseña</a>";
+
+        helper.setSubject(mensaje);
+        helper.setText(contenido, true);
+
+        mailSender.send(message);
     }
 
 

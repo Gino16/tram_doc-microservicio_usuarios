@@ -22,19 +22,20 @@ public class UsuarioController {
     @Autowired
     private UsuarioService usuarioService;
 
-    @Autowired
-    private JavaMailSender mailSender;
 
     @PostMapping("/forgot_password")
     public ResponseEntity<?> procesarForgotPasswordForm(HttpServletRequest request) throws UnsupportedEncodingException, MessagingException {
         String correo = request.getParameter("correo");
         String token = RandomString.make(32);
-        usuarioService.updateResetPassword(correo, token);
+        Usuario user = usuarioService.updateResetPassword(correo, token);
 
+        if (user == null){
+            return ResponseEntity.notFound().build();
+        }
         //String resetPasswordLink = "/reset_password?token=" + token;
         String resetPasswordLink = "http://localhost:3000/cambiar.contrasenia?token=" + token;
 
-        sendMail(correo, resetPasswordLink);
+        usuarioService.sendMail(correo, resetPasswordLink);
 
         return ResponseEntity.ok(resetPasswordLink);
     }
@@ -54,25 +55,7 @@ public class UsuarioController {
 
     }
 
-    private void sendMail(String correo, String resetPasswordLink) throws UnsupportedEncodingException, MessagingException {
-        MimeMessage message = mailSender.createMimeMessage();
-        MimeMessageHelper helper = new MimeMessageHelper(message);
 
-        helper.setFrom("ginoag7@gmail.com", "Mikasa Support");
-        helper.setTo(correo);
-
-        String mensaje = "Recuperar contraseña del sistema";
-
-        String contenido = "<h1>Hola Usuario,</h1> " +
-                "<p>Le alcanzo link para restablecer tu contraseña</p>" +
-                "<p><strong>Click en el link para restablecer contraseña</strong></p>" +
-                "<a href=\"" + resetPasswordLink + "\" >Cambiar contraseña</a>";
-
-        helper.setSubject(mensaje);
-        helper.setText(contenido, true);
-
-        mailSender.send(message);
-    }
 
 
 }
