@@ -37,7 +37,7 @@ public class UsuarioController {
 
         usuarioService.sendMail(correo, resetPasswordLink);
 
-        return ResponseEntity.ok(resetPasswordLink);
+        return ResponseEntity.ok("Se reestablecio la contraseña correctamente");
     }
 
     @PostMapping("/cambiar_contrasenia")
