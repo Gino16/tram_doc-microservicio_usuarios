@@ -84,7 +84,8 @@ public class UsuarioServiceImpl implements UsuarioService {
         String contenido = "<h1>Hola Usuario,</h1> " +
                 "<p>Le alcanzo link para restablecer tu contraseña</p>" +
                 "<p><strong>Click en el link para restablecer contraseña</strong></p>" +
-                "<a href=\"" + resetPasswordLink + "\" >Cambiar contraseña</a>";
+                "<a href=\"" + resetPasswordLink + "\" >Cambiar contraseña</a>" +
+                "<strong>Por favor no responder a este mensaje</strong>";
 
         helper.setSubject(mensaje);
         helper.setText(contenido, true);
